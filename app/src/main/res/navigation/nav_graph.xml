@@ -6,17 +6,26 @@
     app:startDestination="@id/listFragment">
     <fragment
         android:id="@+id/listFragment"
-        android:name="com.kseyko.satellite.ui.view.ListFragment"
+        android:name="com.kseyko.satellite.ui.view.list.ListFragment"
         android:label="list_fragment"
-        tools:layout="@layout/list_fragment" >
+        tools:layout="@layout/list_fragment">
         <action
             android:id="@+id/action_listFragment_to_detailFragment"
             app:destination="@id/detailFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
-        android:name="com.kseyko.satellite.ui.view.DetailFragment"
+        android:name="com.kseyko.satellite.ui.view.detail.DetailFragment"
         android:label="detail_fragment"
-        tools:layout="@layout/detail_fragment" />
+        tools:layout="@layout/detail_fragment">
+        <argument
+            android:name="id"
+            app:argType="integer"
+            app:nullable="false" />
+        <argument
+            android:name="name"
+            app:argType="string"
+            app:nullable="false" />
+    </fragment>
 
 </navigation>
