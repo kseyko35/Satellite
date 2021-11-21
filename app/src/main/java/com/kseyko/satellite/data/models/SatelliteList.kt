@@ -1,8 +1,4 @@
-package com.kseyko.satellite.data.model
-
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
-
+package com.kseyko.satellite.data.models
 
 /**     Code with ❤
 ╔════════════════════════════╗
@@ -13,5 +9,5 @@ import kotlinx.parcelize.Parcelize
 ║      15,November,2021      ║
 ╚════════════════════════════╝
  */
-@Parcelize
-data class SatelliteList(var id : Int, val active : Boolean, val name: String) : Parcelable
+
+data class SatelliteList(var id: Int, val active: Boolean, val name: String)

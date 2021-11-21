@@ -1,4 +1,4 @@
-package com.kseyko.satellite.data.model
+package com.kseyko.satellite.data.models
 
 
 /**     Code with ❤
