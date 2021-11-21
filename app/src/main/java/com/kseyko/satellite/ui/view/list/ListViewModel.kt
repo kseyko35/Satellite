@@ -8,10 +8,8 @@ import com.kseyko.satellite.data.repository.SatelliteRepository
 import com.kseyko.satellite.ui.adapter.SatelliteAdapter
 import com.kseyko.satellite.ui.base.BaseViewModel
 import com.kseyko.satellite.utils.Resource
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class ListViewModel(private val satelliteRepository: SatelliteRepository) : BaseViewModel() {
 
@@ -23,9 +21,7 @@ class ListViewModel(private val satelliteRepository: SatelliteRepository) : Base
     fun fetchSatellite(text: String) {
         _satelliteLiveData.postValue(Resource.loading(null))
         viewModelScope.launch {
-            val satelliteLive = withContext(Dispatchers.IO) {
-                satelliteRepository.searchSatellite(text)
-            }
+            val satelliteLive = satelliteRepository.searchSatellite(text)
             delay(200) // To show progress
             if (satelliteLive.isEmpty()) {
                 _satelliteLiveData.postValue(Resource.error("No content in list", satelliteLive))
