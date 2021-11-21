@@ -11,10 +11,7 @@ package com.kseyko.satellite.data.models
 ╚════════════════════════════╝
  */
 
-data class Satellite(
-    val id: Int,
-    val cost_per_launch: Int,
-    var first_flight: String,
-    val height: Int,
-    val mass: Int
+data class PositionDetail(
+    val id: String,
+    val positions: List<Position>
 )
