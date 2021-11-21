@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import androidx.viewbinding.ViewBinding
 
 
 /**     Code with ❤
@@ -17,7 +17,7 @@ import androidx.viewbinding.ViewBinding
 ║      16,November,2021      ║
 ╚════════════════════════════╝
  */
-abstract class BaseFragment<VB : ViewBinding> : Fragment() {
+abstract class BaseFragment<VB : ViewDataBinding> : Fragment() {
 
     private var _binding: VB? = null
 
@@ -27,7 +27,7 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
 
     var viewId: Int = -1
 
-    abstract fun getViewBinding(
+    abstract fun getDataBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
         attachToParent: Boolean = false
@@ -48,7 +48,7 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = getViewBinding(inflater, container)
+        _binding = getDataBinding(inflater, container)
         return binding.root
     }
 

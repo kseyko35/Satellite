@@ -12,5 +12,4 @@ import androidx.lifecycle.ViewModel
 ║      16,November,2021      ║
 ╚════════════════════════════╝
  */
-abstract class BaseViewModel : ViewModel() {
-}
+abstract class BaseViewModel : ViewModel()
