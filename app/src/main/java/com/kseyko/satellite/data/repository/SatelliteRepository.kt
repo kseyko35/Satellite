@@ -17,10 +17,6 @@ import com.kseyko.satellite.data.remote.SatelliteApi
  */
 class SatelliteRepository(private val satelliteApi: SatelliteApi) {
 
-    suspend fun getSatellites(): List<SatelliteList> {
-        return satelliteApi.getSatellites()
-    }
-
     suspend fun getSatellite(satellitePosition: Int): Satellite {
         return satelliteApi.getSatellite(satellitePosition)
     }
@@ -29,7 +25,7 @@ class SatelliteRepository(private val satelliteApi: SatelliteApi) {
         return satelliteApi.getPosition(satellitePosition)
     }
 
-    fun searchSatellite(text: String): List<SatelliteList> {
+    suspend fun searchSatellite(text: String): List<SatelliteList> {
         return satelliteApi.searchSatellite(text)
     }
 }

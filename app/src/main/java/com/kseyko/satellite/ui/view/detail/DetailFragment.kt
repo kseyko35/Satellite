@@ -4,6 +4,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.kseyko.satellite.data.models.PositionDetail
@@ -11,6 +12,7 @@ import com.kseyko.satellite.data.repository.ManualParsingImp
 import com.kseyko.satellite.databinding.DetailFragmentBinding
 import com.kseyko.satellite.ui.base.BaseViewModelFragment
 import com.kseyko.satellite.ui.view.factory.ViewModelFactory
+import com.kseyko.satellite.utils.Status
 
 class DetailFragment : BaseViewModelFragment<DetailFragmentBinding, DetailViewModel>() {
 
@@ -24,17 +26,6 @@ class DetailFragment : BaseViewModelFragment<DetailFragmentBinding, DetailViewMo
     private var satellitePosition: Int = 0
     private var counter: Int = 0
     lateinit var handler: Handler
-
-
-    private val updatePosition = object : Runnable {
-        override fun run() {
-            binding.textViewDetailLastPositionSol.text =
-                "(${satelliteItemPosition.positions[counter].posX},${satelliteItemPosition.positions[counter].posY})"
-            if (counter < satelliteItemPosition.positions.size - 1) counter++
-            else counter = 0
-            handler.postDelayed(this, 3000)
-        }
-    }
 
     override fun getDataBinding(
         inflater: LayoutInflater,
@@ -61,9 +52,22 @@ class DetailFragment : BaseViewModelFragment<DetailFragmentBinding, DetailViewMo
 
     override fun onObserverData() {
         super.onObserverData()
-        showLoading()
         satelliteItemPosition = viewModel.fetchPosition(satellitePosition)
         viewModel.fetchSatellite(satellitePosition)
+        viewModel.satelliteLiveData.observe(this, {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    hideLoading()
+                }
+                Status.LOADING -> {
+                    showLoading()
+                }
+                Status.ERROR -> {
+                    hideLoading()
+                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
     }
 
     override fun onPause() {
@@ -74,6 +78,16 @@ class DetailFragment : BaseViewModelFragment<DetailFragmentBinding, DetailViewMo
     override fun onResume() {
         super.onResume()
         handler.post(updatePosition)
+    }
+
+    private val updatePosition = object : Runnable {
+        override fun run() {
+            binding.textViewDetailLastPositionSol.text =
+                "(${satelliteItemPosition.positions[counter].posX},${satelliteItemPosition.positions[counter].posY})"
+            if (counter < satelliteItemPosition.positions.size - 1) counter++
+            else counter = 0
+            handler.postDelayed(this, 3000)
+        }
     }
 
     override fun onInitListener() {

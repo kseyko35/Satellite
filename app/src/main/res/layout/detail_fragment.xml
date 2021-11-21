@@ -39,7 +39,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginBottom="60dp"
             android:gravity="center"
-            android:text="@{detailViewModel.satelliteLiveData.first_flight}" />
+            android:text="@{detailViewModel.satelliteLiveData.data.first_flight}" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -63,7 +63,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="@{detailViewModel.satelliteLiveData.height + `/` +detailViewModel.satelliteLiveData.mass}"
+                android:text="@{detailViewModel.satelliteLiveData.data.height + `/` +detailViewModel.satelliteLiveData.data.mass}"
                 android:textColor="@color/black"
                 android:textSize="15sp" />
         </LinearLayout>
@@ -91,7 +91,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="@{String.valueOf(detailViewModel.satelliteLiveData.cost_per_launch)}"
+                android:text="@{String.valueOf(detailViewModel.satelliteLiveData.data.cost_per_launch)}"
                 android:textColor="@color/black" />
         </LinearLayout>
 

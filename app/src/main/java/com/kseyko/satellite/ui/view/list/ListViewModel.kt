@@ -7,7 +7,9 @@ import com.kseyko.satellite.data.models.SatelliteList
 import com.kseyko.satellite.data.repository.SatelliteRepository
 import com.kseyko.satellite.ui.adapter.SatelliteAdapter
 import com.kseyko.satellite.ui.base.BaseViewModel
+import com.kseyko.satellite.utils.Resource
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -15,27 +17,21 @@ class ListViewModel(private val satelliteRepository: SatelliteRepository) : Base
 
     var satelliteAdapter: SatelliteAdapter = SatelliteAdapter()
 
-    private val _satelliteLiveData = MutableLiveData<List<SatelliteList>>()
-    var satelliteLiveData: MutableLiveData<List<SatelliteList>> = _satelliteLiveData
+    private val _satelliteLiveData = MutableLiveData<Resource<List<SatelliteList>>>()
+    var satelliteLiveData: LiveData<Resource<List<SatelliteList>>> = _satelliteLiveData
 
-    private val _searchedSatelliteLiveData = MutableLiveData<List<SatelliteList>>()
-    var searchedSatelliteLiveData: LiveData<List<SatelliteList>> = _searchedSatelliteLiveData
-
-    fun fetchSatellite() {
+    fun fetchSatellite(text: String) {
+        _satelliteLiveData.postValue(Resource.loading(null))
         viewModelScope.launch {
             val satelliteLive = withContext(Dispatchers.IO) {
-                satelliteRepository.getSatellites()
-            }
-            _satelliteLiveData.value = satelliteLive
-        }
-    }
-
-    fun searchText(text: String) {
-        viewModelScope.launch {
-            val searchedSatelliteLive = withContext(Dispatchers.IO) {
                 satelliteRepository.searchSatellite(text)
             }
-            _searchedSatelliteLiveData.value = searchedSatelliteLive
+            delay(200) // To show progress
+            if (satelliteLive.isEmpty()) {
+                _satelliteLiveData.postValue(Resource.error("No content in list", satelliteLive))
+            } else {
+                _satelliteLiveData.postValue(Resource.success(satelliteLive))
+            }
         }
     }
 

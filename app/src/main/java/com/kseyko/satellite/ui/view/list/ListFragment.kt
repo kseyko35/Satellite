@@ -2,6 +2,7 @@ package com.kseyko.satellite.ui.view.list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -9,6 +10,7 @@ import com.kseyko.satellite.data.repository.ManualParsingImp
 import com.kseyko.satellite.databinding.ListFragmentBinding
 import com.kseyko.satellite.ui.base.BaseViewModelFragment
 import com.kseyko.satellite.ui.view.factory.ViewModelFactory
+import com.kseyko.satellite.utils.Status
 
 
 class ListFragment : BaseViewModelFragment<ListFragmentBinding, ListViewModel>(),
@@ -56,15 +58,27 @@ class ListFragment : BaseViewModelFragment<ListFragmentBinding, ListViewModel>()
 
     override fun onObserverData() {
         super.onObserverData()
-        viewModel.fetchSatellite()
-
-        viewModel.searchedSatelliteLiveData.observe(this) {
-            viewModel.setAdapterData(it)
-        }
-
-        viewModel.satelliteLiveData.observe(this) {
-            viewModel.setAdapterData(it)
-        }
+        viewModel.fetchSatellite("")
+        viewModel.satelliteLiveData.observe(this, {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    hideLoading()
+                    it.data?.let { data ->
+                        viewModel.setAdapterData(data)
+                    }
+                }
+                Status.LOADING -> {
+                    showLoading()
+                }
+                Status.ERROR -> {
+                    hideLoading()
+                    it.data?.let { data ->
+                        viewModel.setAdapterData(data)
+                    }
+                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
@@ -73,7 +87,7 @@ class ListFragment : BaseViewModelFragment<ListFragmentBinding, ListViewModel>()
 
     override fun onQueryTextChange(query: String?): Boolean {
         if (query != null) {
-            viewModel.searchText(query)
+            viewModel.fetchSatellite(query)
         }
         return true
     }

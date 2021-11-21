@@ -1,8 +1,4 @@
-package com.kseyko.satellite.data.remote
-
-import com.kseyko.satellite.data.models.PositionDetail
-import com.kseyko.satellite.data.models.Satellite
-import com.kseyko.satellite.data.models.SatelliteList
+package com.kseyko.satellite.utils
 
 
 /**     Code with ❤
@@ -11,15 +7,11 @@ import com.kseyko.satellite.data.models.SatelliteList
 ╠════════════════════════════╣
 ║  seyfiercan35@hotmail.com  ║
 ╠════════════════════════════╣
-║      18,November,2021      ║
+║      21,November,2021      ║
 ╚════════════════════════════╝
  */
-interface SatelliteApi {
-
-
-    suspend fun getSatellite(satellitePosition: Int): Satellite
-
-    fun getPosition(satellitePosition: Int): PositionDetail
-
-    suspend fun searchSatellite(text: String): List<SatelliteList>
+enum class Status {
+    SUCCESS,
+    ERROR,
+    LOADING
 }

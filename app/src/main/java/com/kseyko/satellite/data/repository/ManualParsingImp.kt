@@ -19,11 +19,6 @@ import java.util.*
  */
 class ManualParsingImp(private val context: Context) : SatelliteApi {
 
-    override suspend fun getSatellites(): List<SatelliteList> {
-        val jsonFileString = getJsonDataFromAsset(context, "satellite-list.json")
-        return Gson().fromJson(jsonFileString, Array<SatelliteList>::class.java).asList()
-    }
-
     override suspend fun getSatellite(satellitePosition: Int): Satellite {
         val jsonFileString = getJsonDataFromAsset(context, "satellite-detail.json")
         return Gson().fromJson(jsonFileString, Array<Satellite>::class.java)
@@ -38,15 +33,12 @@ class ManualParsingImp(private val context: Context) : SatelliteApi {
         ).list[satellitePosition]
     }
 
-    override fun searchSatellite(text: String): List<SatelliteList> {
+    override suspend fun searchSatellite(text: String): List<SatelliteList> {
         val jsonFileString = getJsonDataFromAsset(context, "satellite-list.json")
         val filteredSatellite = Gson().fromJson(jsonFileString, Array<SatelliteList>::class.java)
         return filteredSatellite.filter {
-            it.name.lowercase(Locale.getDefault()).contains(
-                text.lowercase(
-                    Locale.getDefault()
-                )
-            )
+            it.name.lowercase(Locale.getDefault())
+                .contains(text.lowercase(Locale.getDefault()))
         }
     }
 }
